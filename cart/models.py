@@ -1,12 +1,8 @@
-# from datetime import datetime
 from django.db import models
-
 from product.models import product_version
 from accounts.models import Country, customer
 from django.contrib import admin
 from django.utils.html import format_html
-# Create your models here.
-
 from core.models import TimeStampedModel
 
 class basket_item(TimeStampedModel, models.Model):
@@ -15,8 +11,7 @@ class basket_item(TimeStampedModel, models.Model):
     total_price = models.FloatField()
     customer = models.ForeignKey(customer, on_delete=models.CASCADE)
 
-    # def __str__(self) -> str:
-    #     return f'{self.quantity}--> created_at: {self.created_at}'
+    
 
 class promocode (TimeStampedModel, models.Model):
     promocode = models.CharField(max_length=8)
@@ -40,12 +35,10 @@ class cart (TimeStampedModel, models.Model):
     customer= models.ForeignKey(customer, on_delete=models.CASCADE)
     
 
-    #Bu cur  yazaraq biz foreign keyde verdiyimizin diger valuelerine cata bilerik, ve daha sonra hemin valueni admin.py da qeyd ederek admin panelde modelimizde elave field olaraq gostere bilerik ; Eger decoratoru yazmasaq==> admin panelde modelimiz ucun yaratdigi elave columna bashligi funksiyamiza uygun olaraq verecekdir (yeni, display_customer_phone), amma decoratoru yazsaq hemin columna adi descriptionda yazdigimizi verecek(yeni "Customer's  phone number"):
     @admin.display(description="Customer's  phone number")
     def display_customer_phone(self):
         return format_html(f'<font color="red">{ self.customer_id.phone}</font>')
 
-    # ============================================================================================================================
 
     def __str__(self) :
         return f'{self.cart_number} - {self.expiration_date}'

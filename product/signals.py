@@ -5,4 +5,4 @@ from .models import product_version
 
 @receiver(pre_save, sender=product_version)
 def slug_func(sender, instance, *args, **kwargs ):
-    instance.slug = slugify(f'{instance.color.color}-{instance.title}- {instance.code}' )
+    instance.slug = slugify(f'{instance.title}- {instance.code}' )

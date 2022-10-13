@@ -4753,3 +4753,8 @@ select.bs-select-hidden, select.selectpicker {
 .letter-space-10 {
 	letter-spacing: 10px !important;
 }
+
+.dropdown-item.active{
+	background-color: var(--bs-dropdown-link-active-color)!important;
+	color: black!important;
+}

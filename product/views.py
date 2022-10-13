@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView
 from django.db.models import Count
 from django.http import Http404
 from django.contrib import messages
-
+from rest_framework import generics
 
 # def product_detail_view(request, slug):
 #     product = product_version.objects.get(slug=slug)
@@ -53,6 +53,8 @@ class ProductList(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = productCategory.objects.all()
         context['brands'] = brand.objects.all()
+        # context['image'] = Image.objects.filter(is_main=True)
+        
         return context
     
     def get_queryset(self):
@@ -62,6 +64,8 @@ class ProductList(ListView):
         else:
             queryset = product_version.objects.all()
         return queryset
+
+
 
 
 

@@ -1,6 +1,4 @@
-from distutils.command.upload import upload
 from django.db import models
-# Create your models here.
 
 from django.contrib.auth.models import AbstractUser
 from core.models import TimeStampedModel
@@ -46,3 +44,9 @@ class customer (TimeStampedModel, models.Model):
 
     def __str__(self) -> str:
         return f'{self.first_name} - {self.last_name}'
+
+class SubscriberEmail(TimeStampedModel):
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.email

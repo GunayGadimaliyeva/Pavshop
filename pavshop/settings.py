@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import django
+from django.utils.encoding import force_str
+django.utils.encoding.force_text = force_str
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _ , get_language, activate
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
@@ -48,14 +52,20 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'product.apps.ProductConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     
     'django_filters',
+    'rosetta',
     
+    'rest_framework_simplejwt.token_blacklist',
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # for multilanguage
+     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -64,6 +74,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'pavshop.urls'
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:8000",
+                        "http://127.0.0.1:8000"]
 
 TEMPLATES = [
     {
@@ -123,15 +136,31 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')  
+]
 
+LANGUAGES = (
+    ('en', _('English')),
+    ('az', _('Azerbaijani')),
+)
+
+JAZZMIN_SETTINGS = {
+    "language_chooser": True,
+}
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+MODELTRANSLATION_LANGUAGES = ('en', 'az')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 import os
@@ -215,5 +244,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 
-    'PAGE_SIZE': 2
+    'PAGE_SIZE': 2,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',  # <-- And here
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ],
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAdminUser'
+#    ),
 }

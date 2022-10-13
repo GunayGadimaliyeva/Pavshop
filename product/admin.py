@@ -6,15 +6,25 @@ from .models import *
 
 
 
-admin.site.register(productCategory)
 admin.site.register(brand)
 admin.site.register(discount)
 admin.site.register(designer)
-admin.site.register(color)
 admin.site.register(product)
 admin.site.register(Image)
+admin.site.register(Property)
+admin.site.register(PropertyValue)
+admin.site.register(ProductPropertyValue)
 
-# admin.site.register(product_version)
+from modeltranslation.admin import TranslationAdmin
+
+class ProductCategoryAdmin(TranslationAdmin):
+    pass
+
+admin.site.register(productCategory, ProductCategoryAdmin)
+
+
+
+
 admin.site.register(review)
 
 
@@ -43,5 +53,3 @@ class discountFilter(SimpleListFilter):
 @admin.register(product_version)
 class productAdmin(admin.ModelAdmin):
     list_filter = [discountFilter]
-    # Bununla title yazdiqca avtomatik slugun yazildigini gore bilerik:
-    # prepopulated_fields = {'slug':['title',] }

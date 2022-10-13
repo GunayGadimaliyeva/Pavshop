@@ -3,8 +3,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.forms import UserCreationForm
-# from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
+from django.utils.translation import gettext_lazy as _
+
 
 
 class RegisterForm(UserCreationForm):
@@ -16,18 +17,11 @@ class RegisterForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             new_class ={
-                'placeholder': f'{self.fields[str(field)].label}'
+                'placeholder': f'{self.fields[str(_(field))].label}'
             }
             self.fields[str(field)].widget.attrs.update(
                 new_class
             )
-
-        # self.fieldsqemail'].label = 'Email Address'
-    # def clean(self):
-    #    super().clean()
-    #    if self.cleaned_data['password1']!= self.cleaned_data['password2']:
-    #         raise ValidationError('Passwords are not equal!')
-
 
     def save(self, commit=True):
         instance = super(RegisterForm, self).save(commit=False)
@@ -46,7 +40,7 @@ class LoginForm(forms.ModelForm):
         username = self.cleaned_data['username']
         password = self.cleaned_data['password']
         if not authenticate(username = username, password = password ):
-            raise forms.ValidationError('Invalid login!')
+            raise forms.ValidationError(_('Invalid login!'))
 
     
         

@@ -1,13 +1,6 @@
 from django.views.generic import ListView, DetailView
 from product.models import product_version, productCategory
 from .models import blog, comment
-# def blog_detail_view(request):
-#     first = blog.objects.all()[2:4]
-#     print(first)
-#     return render(request, 'blog-detail.html')
-
-# def blog_list_view(request):
-#     return render(request, 'blog-list.html')
 
 class BlogList(ListView):
     model = blog
@@ -26,15 +19,7 @@ class BlogList(ListView):
             return queryset
         else:
             return context
-        # return context
-    
-    # def get_queryset(self):
-    #     category_name = self.request.GET.get('category')
-    #     if category_name:
-    #         queryset = product_version.objects.filter(product__category__category_name=category_name)
-    #     else:
-    #         queryset = product_version.objects.all()
-    #     return queryset
+        
     
     
 

@@ -1,4 +1,6 @@
-<!DOCTYPE html>{% load static %}
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
 <html lang="en">
 
 <head>
@@ -23,6 +25,7 @@
     <!-- Online Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -48,7 +51,7 @@
                         <!-- NAV -->
                         <div class="collapse navbar-collapse" id="nav-open-btn">
                             <ul class="nav">
-                                <li class="dropdown active"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">Home</a>
+                                <li class="dropdown active"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">{% trans 'Home' %}</a>
                                     <ul class="dropdown-menu">
                                         <li> <a href="{% url 'homepage' %}">Index Default</a> </li>
                                         <li> <a href="index-1.html">Index 2</a> </li>
@@ -59,7 +62,7 @@
                                         <li> <a href="index-header-4.html">Index Header 4</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">Pages</a>
+                                <li class="dropdown"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">{% trans 'Pages' %}</a>
                                     <ul class="dropdown-menu">
                                         <li> <a href="{% url 'product_list' %}">Shop 01 </a> </li>
                                         <li> <a href="shop_02.html">Shop 02</a> </li>
@@ -79,7 +82,7 @@
                                 <li> <a href="{% url 'about-us'%}">About </a> </li>
 
                                 <!-- Two Link Option -->
-                                <li class="dropdown"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">Designer</a>
+                                <li class="dropdown"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">{% trans 'Designer' %}</a>
                                     <div class="dropdown-menu two-option">
                                         <div class="row">
                                             <ul class="col-sm-6">
@@ -107,7 +110,7 @@
                                 </li>
 
                                 <!-- MEGA MENU -->
-                                <li class="dropdown megamenu"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">store</a>
+                                <li class="dropdown megamenu"> <a href="#." class="dropdown-toggle" data-toggle="dropdown">{% trans 'store' %}</a>
                                     <div class="dropdown-menu">
                                         <div class="row">
 
@@ -178,7 +181,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li> <a href="{% url 'contact' %}"> contact</a> </li>
+                                <li> <a href="{% url 'contact' %}"> {% trans 'contact' %}</a> </li>
                             </ul>
                         </div>
 
@@ -191,16 +194,16 @@
                                     <ul class="dropdown-menu">
                                         {% if request.user.is_authenticated %}
                                         <li>
-                                            <h6>HELLO, {{ request.user.username }} !</h6>
+                                            <h6> {% trans 'HELLO' %}, {{ request.user.username }} !</h6>
                                         </li>
                                         <li><a href="#">MY CART</a></li>
-                                        <li><a href="#">ACCOUNT INFO</a></li>
-                                        <li><a href="{% url 'logout' %}">LOG OUT</a></li>
+                                        <li><a href="#">{% trans 'ACCOUNT INFO' %}</a></li>
+                                        <li><a href="{% url 'logout' %}">{% trans 'LOG OUT' %}</a></li>
                                         {% else %}
                                             <li>
-                                                <h6>Please, register! </h6>
+                                                <h6>{% trans 'Please, register!' %} </h6>
                                             </li>
-                                            <li><a href="{% url 'register' %}">Register</a></li>
+                                            <li><a href="{% url 'register' %}">{% trans 'Register' %}</a></li>
                                         {% endif %}
                                     </ul>
                                 </li>
@@ -254,20 +257,61 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li>
+                                    <form action="{% url 'set_language' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="row g-2">
+                                            <div class="col ">
+                                            <div class="form-floating">
+                                                <input name="next" type="hidden" value="{{ request.get_full_path|slice:"3:" }}">
+                                                <select class="" name="language" onchange="this.form.submit()" id="language">
+                                                {% get_current_language as LANGUAGE_CODE %}
+                                                {% get_available_languages as LANGUAGES %}
+                                                {% get_language_info_list for LANGUAGES as languages %}
+                                                {% for language in languages %}
+                                                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                                    {{ language.name_local }} ({{ language.code }})
+                                                    </option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </li>
+                                  
+                                
+                                
+                                
                             </ul>
                         </div>
                     </nav>
                 </div>
             </div>
-        </header>
+        </header> 
+        
         {% block content %} {% endblock %}
+        <!-- News Letter -->
+                    <section class="news-letter padding-top-150 padding-bottom-150">
+                        <div class="container">
+                            <div class="heading light-head text-center margin-bottom-30">
+                                <h4>{% trans 'NEWSLETTER' %}</h4>
+                                <span>Phasellus lacinia fermentum bibendum. Interdum et malesuada fames ac ante ipsumien lacus, eu posuere odi </span> </div>
+                            <form id="subscription-form">
+                                <input type="email" id="subscription-email" placeholder="Enter your email address" required>
+                                <button type="submit">{% trans 'SEND ME' %}</button>
+                            </form>
+                        </div>
+                    </section>
+                    
         <footer>
+           
             <div class="container">
 
                 <!-- ABOUT Location -->
                 <div class="col-md-3">
                     <div class="about-footer"> <img class="margin-bottom-30" src="{% static 'images/logo-foot.png' %}" alt="">
-                        <p><i class="icon-pointer"></i> Street No. 12, Newyork 12, <br> MD - 123, USA.</p>
+                        <p><i class="icon-pointer"></i> {% trans 'Street No. 12, Newyork 12,' %}<br> MD - 123, USA.</p>
                         <p><i class="icon-call-end"></i> 1.800.123.456789</p>
                         <p><i class="icon-envelope"></i> info@PAVSHOP.com</p>
                     </div>
@@ -275,52 +319,54 @@
 
                 <!-- HELPFUL LINKS -->
                 <div class="col-md-3">
-                    <h6>HELPFUL LINKS</h6>
+                    <h6>{% trans 'HELPFUL LINKS' %}</h6>
                     <ul class="link">
-                        <li><a href="#."> Products</a></li>
-                        <li><a href="#."> Find a Store</a></li>
-                        <li><a href="#."> Features</a></li>
-                        <li><a href="#."> Privacy Policy</a></li>
-                        <li><a href="{% url 'blog_list' %}"> Blog</a></li>
-                        <li><a href="#."> Press Kit </a></li>
+                        <li><a href="#."> {% trans 'Products' %}</a></li>
+                        <li><a href="#."> {% trans 'Find a Store' %}</a></li>
+                        <li><a href="#."> {% trans 'Features' %}</a></li>
+                        <li><a href="#."> {% trans 'Privacy Policy' %}</a></li>
+                        <li><a href="{% url 'blog_list' %}"> {% trans 'Blog' %}</a></li>
+                        <li><a href="#."> {% trans 'Press Kit' %}</a></li>
                     </ul>
                 </div>
 
                 <!-- SHOP -->
                 <div class="col-md-3">
-                    <h6>SHOP</h6>
+                    <h6>{% trans 'SHOP' %}</h6>
                     <ul class="link">
-                        <li><a href="#."> About Us</a></li>
-                        <li><a href="#."> Career</a></li>
-                        <li><a href="#."> Shipping Methods</a></li>
-                        <li><a href="{% url 'contact' %}"> Contact</a></li>
-                        <li><a href="#."> Support</a></li>
-                        <li><a href="#."> Retailer</a></li>
+                        <li><a href="#."> {% trans 'About Us' %}</a></li>
+                        <li><a href="#."> {% trans 'Career' %}</a></li>
+                        <li><a href="#."> {% trans 'Shipping Methods' %}</a></li>
+                        <li><a href="{% url 'contact' %}"> {% trans 'Contact' %}</a></li>
+                        <li><a href="#."> {% trans 'Support' %}</a></li>
+                        <li><a href="#."> {% trans 'Retailer' %}</a></li>
                     </ul>
                 </div>
 
                 <!-- MY ACCOUNT -->
                 <div class="col-md-3">
-                    <h6>MY ACCOUNT</h6>
+                    <h6>{% trans 'MY ACCOUNT' %}</h6>
                     <ul class="link">
-                        <li><a href="{% url 'login' %}"> Login</a></li>
-                        <li><a href="#."> My Account</a></li>
-                        <li><a href="#."> My Cart</a></li>
-                        <li><a href="#."> Wishlist</a></li>
-                        <li><a href="{% url 'check_out' %}"> Checkout</a></li>
+                        <li><a href="{% url 'login' %}">{% trans ' Login' %}</a></li>
+                        <li><a href="#."> {% trans 'My Account' %}</a></li>
+                        <li><a href="#."> {% trans 'My Cart' %}</a></li>
+                        <li><a href="#."> {% trans 'Wishlist' %}</a></li>
+                        <li><a href="{% url 'check_out' %}">{% trans ' Checkout' %}</a></li>
                     </ul>
                 </div>
 
                 <!-- Rights -->
 
                 <div class="rights">
-                    <p>© 2017 PAVSHOP All right reserved. </p>
+                    <p>{% trans '© 2017 PAVSHOP All right reserved.' %} </p>
                     <div class="scroll"> <a href="#wrap" class="go-up"><i class="lnr lnr-arrow-up"></i></a> </div>
                 </div>
             </div>
         </footer>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="{% static 'js/subscriber_email.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/own-menu.js' %}"></script>
@@ -334,3 +380,5 @@
 </body>
 
 </html>
+
+
