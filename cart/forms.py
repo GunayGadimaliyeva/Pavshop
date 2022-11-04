@@ -10,7 +10,6 @@ class billingForm(forms.ModelForm):
             'Ship_to_a_different_address': forms.CheckboxInput()
         }
 
-
         
 class shippingForm(forms.ModelForm):
     class Meta:

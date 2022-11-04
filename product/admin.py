@@ -3,8 +3,6 @@ from modeltranslation.admin import TranslationAdmin
 from django.contrib.admin import SimpleListFilter
 from .models import *
 
-
-
 admin.site.register(Brand)
 admin.site.register(Discount)
 admin.site.register(Designer)
@@ -15,7 +13,6 @@ admin.site.register(PropertyValue)
 admin.site.register(ProductPropertyValue)
 admin.site.register(Review)
 admin.site.register(Wishlist)
-
 
 
 class ProductCategoryAdmin(TranslationAdmin):
@@ -48,7 +45,4 @@ class discountFilter(SimpleListFilter):
 @admin.register(Product_version)
 class ProductVersionAdmin(admin.ModelAdmin):
     list_filter = [discountFilter]
-    inlines = (ImageInlineAdmin,)   #Product_version modeline Images hissesini elave edirem ki rahatliqla eyni sehifeden hem productu, hem de onun imagelerini add ede bilim.
-
-    # Bununla title yazdiqca avtomatik slugun yazildigini gore bilerik:
-    # prepopulated_fields = {'slug':['title',] }
+    inlines = (ImageInlineAdmin,)   

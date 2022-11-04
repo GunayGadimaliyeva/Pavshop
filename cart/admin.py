@@ -3,8 +3,6 @@ from .models import *
 from django.contrib.admin import SimpleListFilter
 from django.utils.safestring import mark_safe
 
-# Register your models here.
-#modellerimizi her appin oz admin.py inda bu cur register edirik ki, admin panelimizde gorunsun:
 admin.site.register([Basket_item, Promocode, Basket, Shipping_info, Billing_detail, Payment_method, OrderStatus, Order])
 
 
@@ -13,13 +11,13 @@ class CardNumberFilter(SimpleListFilter):
     parameter_name = 'mailll'
     def lookups(self, request, model_admin):
         return (
-           ( 'has_mail', 'has_mail'),  #burdaki ikinci terefdeki yazdiqlarimiz admin panelde gorunendir.
+           ( 'has_mail', 'has_mail'),  
            ( 'no_mail', 'no_mail')
         )
     def queryset(self, request, queryset) :
         if not self.value():
             return queryset
-        if self.value().lower() == 'has_mail':     #burdaki has_mail yuxarida lookupsda yazdigimiz birinci terefdeki has_maildir.
+        if self.value().lower() == 'has_mail':     
             return queryset.exclude(mail='')
         if self.value().lower() == 'no_mail':
             return queryset.filter(mail='')
@@ -33,10 +31,6 @@ class CartAdmin(admin.ModelAdmin):
     list_editable= [ 'cvv_code',  ] 
     list_max_show_all = 10
     list_per_page = 2
-    # readonly_fields=['created_at']
-    # fields=['cvv_code', 'expiration_date']
-    # Yaxud fields-i bele de yaza bilerik ki, expiration_date ve  cart_number bir setirde gorunsun : 
-    # fields=['cvv_code', ('expiration_date', 'cart_number')]
     fieldsets=[
         ("Cart details", {
             'fields':(
@@ -49,24 +43,12 @@ class CartAdmin(admin.ModelAdmin):
         }),
         ('Customer info',{
             'fields':('user',),
-            # 'classes': ('collapse',)
         })
     ]  
-    # NOTE: Bunun==>admin.site.register(cart, CartAdmin) evezine yuxarida @admin.register(cart) decoratorunu da yazsaq ishleyecek. 
-    # admin.site.register(cart, CartAdmin) 
-
-    #Models.py da Cart modelinin altinda yazdigimizi burda bu cur de yaza bilerik, sadece burada funksiya self ve obj qebul edir, self-burada CartAdmin classina uygun gelir.
+    
     @admin.display(description='Additional column')
     def display1_customer_phone(self, obj):
-        return format_html('<font color="red">{}</font>', obj.user.phone )   #bu format_html-dir.
-        # return f'<font color="red">{ obj.customer_id.phone}'                      #bele de yaza bilerik , bu f stringdir.
-        
-        ##NOTE:  mark safe ile bele yaza bilerdik: 
-        # msg = format_html('<font color="red">{}</font>', obj.customer_id.phone )
-        # msg+='</font>'
-        # return mark_safe(msg)
-
-
+        return format_html('<font color="red">{}</font>', obj.user.phone )   
 
 
 admin.site.site_title= "Pavshopun admin paneli"

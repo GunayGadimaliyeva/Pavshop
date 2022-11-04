@@ -19,10 +19,6 @@ class BlogListGeneric(generics.ListCreateAPIView):
     serializer_class = CreateBlogSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['category', 'blogTag']
-    # Eger settingsde pagination_class-i teyin etmishikse hec burda yazmaga ehtiyac yoxdur:
-    # pagination_class = LimitOffsetPagination
-    # Limit/offset-siz yazmaqcun yeni page ile:
-    # pagination_class = PageNumberPagination  
 
 class BlogListView(APIView):
     permission_classes = (IsAuthenticated,)  
@@ -30,23 +26,8 @@ class BlogListView(APIView):
         if pk:
             blog_ = get_object_or_404(Blog, id=pk)
             return Response(BlogListSerializer(blog_).data)
-            # or:
-            # blog_ = blog.objects.filter(slug=slug)
-            # if blog_.exists():
-            #     blog_ = blog_.first()
-            #     return Response(BlogSerializer(blog_).data)
-            # else:
-            #     raise Http404
         blogs = Blog.objects.all()
 
-        # Pagination in APIVIEW:
-        # page_number = self.request.query_params.get('page',1)   #Burda yazdigimiz 1 onu gosterir ki eger ?page=number yazmasaq yeni birbasha api/blogs-a request atsaq onda 1 ci sehifeni getirsin (settingsde pagesizeda hansi reqemi versek her sehifede o qeder blog gosterecek)
-        # paginator = Paginator(blogs, settings.REST_FRAMEWORK['PAGE_SIZE'])
-        # blog_list = BlogListSerializer(paginator.page(page_number), many=True).data
-        # ----------------------------------------------------------------------
-
-        # blog_list = [{'title': blog.blog_title, 'description': blog.desc} for blog in blogs]
-        # Yuxarida commente aldigim evezine serializer ile bele yaziriq: (Note: eger blogs-dan gelen shey listdirse mnay=True yazmaliyiq, amma eger meselen  blog = blog.objects.get(id=3)=> bele olsaydi ondan qayidan data 1 dene olacagi ucun many=True-a ehtiyac olmayacaqdi):
         blog_list = BlogListSerializer(blogs, many=True).data
         return Response(blog_list)
     
@@ -82,11 +63,6 @@ class BlogListView(APIView):
         if not blog_.exists():
             raise Http404
         blog_ = blog_.first()
-        # hard delete:
-        # deleted_count, _ = blog_.delete()
-        # yaxud:
-        # blog_.hard_delete()
-        # soft delete: (soft_delete() methodu modelin ozunde yazmishiq )
         blog_.soft_delete()
         return Response(status=204)
 

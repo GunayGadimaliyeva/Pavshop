@@ -1,5 +1,4 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from core.models import TimeStampedModel
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -44,7 +43,6 @@ class Blog (TimeStampedModel, models.Model):
         super(Blog, self).delete()
 
     def __str__(self) -> str:
-        # print(blog.objects.filter(tag_blog__id = self.id))
         return f' Blog by {self.title}'
         
     def save(self, *args, **kwargs):
@@ -56,10 +54,6 @@ class Image (models.Model):
     blog =  models.ForeignKey(Blog, on_delete=models.CASCADE, default=True, null=True)
 
 
-# class blog_tag_relation (models.Model):
-#     blog_id = models.ForeignKey(blogs, on_delete=models.CASCADE)
-#     tag_id = models.ForeignKey(tags, on_delete=models.CASCADE)
-
 
 class Comment (TimeStampedModel, models.Model):
     subject = models.TextField()
@@ -69,7 +63,7 @@ class Comment (TimeStampedModel, models.Model):
 
     def __str__(self) -> str:
         return f' Comment by  {self.user_id}'
-# comments.objects.create(subject = "I read the blog...", desc="It's amazing", customer_id=customer.objects.get(id=1), blog_id=blog.objects.get(id=1))
+
 
 class BlogStatistic(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)

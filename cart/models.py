@@ -21,8 +21,7 @@ class Promocode (TimeStampedModel, models.Model):
 
 class Basket(TimeStampedModel,models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, null=True)
-    # promocode = models.ForeignKey(promocode, on_delete=models.CASCADE)
-    # total_price = models.FloatField()
+
 
 class Basket_item(TimeStampedModel, models.Model):
     product_version = models.ForeignKey(Product_version, on_delete=models.CASCADE, null=True)
@@ -30,11 +29,6 @@ class Basket_item(TimeStampedModel, models.Model):
     property = models.ForeignKey(ProductPropertyValue, on_delete =models.CASCADE, null=True)
     basket = models.ForeignKey(Basket, on_delete = models.CASCADE, null = True)
     price = models.FloatField()
-    # customer = models.ForeignKey(customer, on_delete=models.CASCADE)
-
-    # def __str__(self) -> str:
-    #     return f'{self.quantity}--> created_at: {self.created_at}'
-
 
 
 class Cart (TimeStampedModel, models.Model):
@@ -44,12 +38,9 @@ class Cart (TimeStampedModel, models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
 
-    #Bu cur  yazaraq biz foreign keyde verdiyimizin diger valuelerine cata bilerik, ve daha sonra hemin valueni admin.py da qeyd ederek admin panelde modelimizde elave field olaraq gostere bilerik ; Eger decoratoru yazmasaq==> admin panelde modelimiz ucun yaratdigi elave columna bashligi funksiyamiza uygun olaraq verecekdir (yeni, display_customer_phone), amma decoratoru yazsaq hemin columna adi descriptionda yazdigimizi verecek(yeni "Customer's  phone number"):
     @admin.display(description="Customer's  phone number")
     def display_customer_phone(self):
         return format_html(f'<font color="red">{ self.user_id.phone}</font>')
-
-    # ============================================================================================================================
 
     def __str__(self) :
         return f'{self.cart_number} - {self.expiration_date}'

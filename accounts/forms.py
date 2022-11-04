@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.forms import UserCreationForm
-# from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 
@@ -22,13 +21,6 @@ class RegisterForm(UserCreationForm):
             self.fields[str(field)].widget.attrs.update(
                 new_class
             )
-
-        # self.fieldsqemail'].label = 'Email Address'
-    # def clean(self):
-    #    super().clean()
-    #    if self.cleaned_data['password1']!= self.cleaned_data['password2']:
-    #         raise ValidationError('Passwords are not equal!')
-
 
     def save(self, commit=True):
         instance = super(RegisterForm, self).save(commit=False)

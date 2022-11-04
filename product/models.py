@@ -34,17 +34,11 @@ class Designer (models.Model):
         return self.designer
    
 
-
-
-
 class ProductCategory(TimeStampedModel):
     category_name = models.CharField(max_length=255, unique=True)
-    # quantity = models.PositiveIntegerField(null=True)
-
 
     def __str__(self):
         return self.category_name
-    #Meselen bizde admin panelde modelin adini  'productCategorys' olaraq gosterecek, amma bu duz deyil, duzeltmek ucun bu cur yaziriq:
     class Meta:
         verbose_name_plural = 'productCategories'
 
@@ -54,11 +48,6 @@ class Product (TimeStampedModel, models.Model):
     small_desc = models.TextField()
     large_desc = models.TextField()
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True)
-    # def save(self, *args, **kwargs):
-    #     for categoryy in productCategory:
-    #         if self.category == categoryy:
-    #             categoryy['quantity'] += 1
-    #             super(product, self).save(*args, **kwargs)
 
 
 class Product_version (TimeStampedModel, models.Model):
@@ -70,10 +59,6 @@ class Product_version (TimeStampedModel, models.Model):
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE, blank=True, null=True, default=None)
     designer= models.ForeignKey(Designer, on_delete=models.CASCADE, default=True)
     slug = models.SlugField(null=True, blank=True, unique=True)
-
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(f'{self.color.color}-{self.title}- {self.code}' )
-    #     super(product_version, self ).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -88,8 +73,6 @@ class Image(models.Model):
         return f'Image of {self.product.title}'
 
 
-
-
 class Rating (models.Model):
     point = models.IntegerField()
 
@@ -101,20 +84,16 @@ class Review(TimeStampedModel, models.Model):
     product_version = models.ForeignKey(Product_version, on_delete=models.CASCADE, null=True)
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE, default=1)
 
-    
 
 
 class Property(models.Model):
     title = models.CharField(max_length=50)
     category = models.ForeignKey(ProductCategory, on_delete = models.CASCADE)
 
-
     class Meta:
         verbose_name_plural = 'Properties'
     def __str__(self):
         return self.title
-
-
 
 
 class PropertyValue(models.Model):
@@ -125,14 +104,9 @@ class PropertyValue(models.Model):
         return self.title
 
 
-
 class ProductPropertyValue(models.Model):
     property_value = models.ForeignKey(PropertyValue, on_delete=models.CASCADE)
     product = models.ForeignKey(Product_version, on_delete=models.CASCADE)
-
-  
-    # def __str__(self):
-    #     return self.property_value
 
 
 class Wishlist(models.Model):

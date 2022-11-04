@@ -2,10 +2,6 @@ from distutils.command.upload import upload
 from django.db import models
 from django.core.management.commands import makemessages
 
-
-
-
-# Create your models here.
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -14,8 +10,6 @@ class TimeStampedModel(models.Model):
         abstract=True 
 
 
-# class Images(models.Model):
-#     img = models.many
 class Adress (models.Model):
     address = models.CharField(max_length=200)
     class Meta:
