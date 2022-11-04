@@ -1,8 +1,8 @@
 from modeltranslation.translator import translator, TranslationOptions
-from .models import blog
+from .models import Blog
 
 class BlogsTranslationOptions(TranslationOptions):
-    fields = ('blog_title', 'desc')
+    fields = ('title', 'short_desc')
 
-translator.register(blog, BlogsTranslationOptions)
+translator.register(Blog, BlogsTranslationOptions)
 

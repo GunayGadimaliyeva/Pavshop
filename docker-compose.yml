@@ -2,16 +2,23 @@ version: "3.10"
    
 services:
   db:
-      image: postgres
-      ports: 
-        - 5432:5432
-      volumes:
-        - ./data/db:/var/lib/postgresql/data 777
-      environment:
-        - POSTGRES_DB=pavshop
-        - POSTGRES_USER=Gunay
-        - POSTGRES_PASSWORD=Adnsuuni12345678
-      container_name: postgres__db
+    image: postgres
+    ports: 
+      - 5432:5432
+    volumes:
+      - ./data/db:/var/lib/postgresql/data 777
+    environment:
+      - POSTGRES_DB=pavshop
+      - POSTGRES_USER=Gunay
+      - POSTGRES_PASSWORD=Adnsuuni12345678
+    container_name: postgres_db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
   
   
   

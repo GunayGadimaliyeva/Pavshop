@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %} {% block content %}
+{% extends 'base.html' %}{% load static blog_custom_tags blog_custom_filters %} 
+{% block title %} Blog-detail {% endblock %}
+{% block content %}
 <!--======= SUB BANNER =========-->
 <section class="sub-bnr" data-stellar-background-ratio="0.5">
     <div class="position-center-center">
@@ -27,12 +29,13 @@
                         <!-- Post Img -->
                         <img class="img-responsive" src="{% static 'images/blog-list-img-2.jpg' %}" alt="">
                         <!-- Tittle -->
-                        <div class="post-tittle left"> <a href="#." class="tittle">{{blog.blog_title}}</a>
+                        <div class="post-tittle left"> <a href="#." class="tittle">{{blog.title}}</a>
                             <!-- Post Info -->
                             <span><i class="primary-color icon-user"></i> by {{blog.user.username}}</span> <span><i class="primary-color icon-calendar"></i>{{blog.created_at|date:'F d, Y'}} </span> <span><i class="primary-color icon-bubble"></i> {{ blog.comments.count }}</span> <span><i class="primary-color icon-tag"></i> Furniture</span>                            </div>
                         <!-- Post Content -->
                         <div class="text-left">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat dui at lacus aliquet, a consequat enim aliquet. Integer molestie sit amet sem et faucibus. Nunc ornare pharetra dui, vitae auctor orci fringilla eget.
+                            {{blog.content|safe}}
+                            <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat dui at lacus aliquet, a consequat enim aliquet. Integer molestie sit amet sem et faucibus. Nunc ornare pharetra dui, vitae auctor orci fringilla eget.
                                 Pellentesque in placerat felis. Etiam mollis venenatis luctus. Morbi ac scelerisque mauris. Etiam sodales a nulla ornare viverra. Nunc at blandit neque, bibendum varius purus. <br>
                                 <br> Nam sit amet sapien vitae enim vehicula tincidunt. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc faucibus imperdiet vulputate. Morbi volutpat leo iaculis elit vehicula,
                                 eu convallis magna finibus. Suspendisse tristique ullamcorper erat a elementum. Cras eget elit non nunc aliquam ullamcorper quis sed metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada, erat
@@ -41,15 +44,15 @@
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat dui at lacus aliquet, a consequat enim aliquet. Integer molestie sit amet sem et faucibus. Nunc ornare pharetra dui, vitae auctor orci fringilla eget.
                                 Pellentesque in placerat felis. Etiam mollis venenatis luctus. Morbi ac scelerisque mauris. Etiam sodales a nulla ornare viverra. <br>
                                 <br> Nam sit amet sapien vitae enim vehicula tincidunt. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc faucibus imperdiet vulputate. Morbi volutpat leo iaculis elit vehicula,
-                                eu convallis magna finibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada, erat in ullamcorper bibendum, elit lacus mattis lorem, quis luctus diam lorem vel ligula.</p>
+                                eu convallis magna finibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada, erat in ullamcorper bibendum, elit lacus mattis lorem, quis luctus diam lorem vel ligula.</p> -->
 
                             <!-- Post Img -->
-                            <img class="img-responsive margin-top-50 margin-bottom-50" src="{% static 'images/blog-list-img-1.jpg' %}" alt="">
+                            <!-- <img class="img-responsive margin-top-50 margin-bottom-50" src="{% static 'images/blog-list-img-1.jpg' %}" alt="">
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat dui at lacus aliquet, a consequat enim aliquet. Integer molestie sit amet sem et faucibus. Nunc ornare pharetra dui, vitae auctor orci fringilla eget.
                                 Pellentesque in placerat felis. Etiam mollis venenatis luctus. Morbi ac scelerisque mauris. Etiam sodales a nulla ornare viverra. Nunc at blandit neque, bibendum varius purus. <br>
                                 <br> Nam sit amet sapien vitae enim vehicula tincidunt. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc faucibus imperdiet vulputate. Morbi volutpat leo iaculis elit vehicula,
                                 eu convallis magna finibus. Suspendisse tristique ullamcorper erat a elementum. Cras eget elit non nunc aliquam ullamcorper quis sed metus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec malesuada, erat
-                                in ullamcorper bibendum, elit lacus mattis lorem, quis luctus diam lorem vel ligula.</p>
+                                in ullamcorper bibendum, elit lacus mattis lorem, quis luctus diam lorem vel ligula.</p> -->
 
                             <!-- LIST STYLE -->
                             <ul class="list-group margin-top-50 margin-top-20">
@@ -75,8 +78,8 @@
                                 <div class="col-md-8">
                                     <h5 class="shop-tittle">PRODUCT TAGS</h5>
                                     <ul class="shop-tags padding-left-15">
-                                        {% for tag in blog.blogTag.all %}
-                                            <li><a href="#.">{{tag.tag_title}}</a></li>
+                                        {% for tag in blog.tag.all %}
+                                            <li><a href="#.">{{tag.title}}</a></li>
                                         {% endfor %}
                                         <!-- <li><a href="#.">Chair</a></li>
                                         <li><a href="#.">Bedsheets</a></li>
@@ -251,8 +254,9 @@
                         <!-- Category -->
                         <h5 class="shop-tittle margin-bottom-30">category</h5>
                         <ul class="shop-cate">
+                            {% get_categories as categories %}
                             {% for category in categories %}
-                                <li><a href="#."> {{category}} <span>24</span></a></li>
+                                <li><a href="{% url 'product_list'%}?category={{category.category_name}}"> {{category}} <span>{{ category|count}} </span></a></li>
                             {% endfor %}
                         </ul>
 
@@ -264,7 +268,7 @@
                                     <div class="media-left">
                                         <a href="#"> <img class="media-object" src="{% static 'images/sm-post-1.jpg' %}" alt=""></a>
                                     </div>
-                                    <div class="media-body"> <a class="media-heading" href="#.">{{recent_blog.blog_title}}</a> <span>Posted on {{recent_blog.created_at|date:"M d "}}</span> </div>
+                                    <div class="media-body"> <a class="media-heading" href="#.">{{recent_blog.title}}</a> <span>Posted on {{recent_blog.created_at|date:"M d "}}</span> </div>
                                 </li>
                             {% endfor %}
                         </ul>

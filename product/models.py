@@ -1,21 +1,20 @@
-# Create your models here.
 from distutils.command.upload import upload
 from django.db import models
 from datetime import date
 from blog.models import BlogStatistic
-from accounts.models import customer
 from core.models import TimeStampedModel
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from django.utils.text import slugify
 
-class brand (TimeStampedModel, models.Model):
+class Brand (TimeStampedModel, models.Model):
     brand = models.CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         return f'{self.brand} - {self.created_at}'
 
 
-class discount(TimeStampedModel, models.Model):
+class Discount(TimeStampedModel, models.Model):
     name = models.CharField(max_length=255, unique=True)
     desc = models.CharField(max_length=255)
     disc_is_percent = models.BooleanField(default=True)
@@ -28,7 +27,7 @@ class discount(TimeStampedModel, models.Model):
             return f'{self.name} - {self.disc_amount}AZN'
 
 
-class designer (models.Model):
+class Designer (models.Model):
     designer = models.CharField(max_length=100, unique=True)
 
     def __str__(self) -> str:
@@ -38,32 +37,43 @@ class designer (models.Model):
 
 
 
-class productCategory(TimeStampedModel):
+class ProductCategory(TimeStampedModel):
     category_name = models.CharField(max_length=255, unique=True)
+    # quantity = models.PositiveIntegerField(null=True)
 
 
     def __str__(self):
         return self.category_name
+    #Meselen bizde admin panelde modelin adini  'productCategorys' olaraq gosterecek, amma bu duz deyil, duzeltmek ucun bu cur yaziriq:
     class Meta:
         verbose_name_plural = 'productCategories'
 
 
-class product (TimeStampedModel, models.Model):
-    category = models.ForeignKey(productCategory, on_delete=models.CASCADE)
+class Product (TimeStampedModel, models.Model):
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name = 'categor')
     small_desc = models.TextField()
     large_desc = models.TextField()
-    brand = models.ForeignKey(brand, on_delete=models.CASCADE, blank=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True)
+    # def save(self, *args, **kwargs):
+    #     for categoryy in productCategory:
+    #         if self.category == categoryy:
+    #             categoryy['quantity'] += 1
+    #             super(product, self).save(*args, **kwargs)
 
 
-class product_version (TimeStampedModel, models.Model):
+class Product_version (TimeStampedModel, models.Model):
     title = models.CharField(max_length=50, default='')
-    product = models.ForeignKey(product, on_delete=models.CASCADE, default=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=True)
     code = models.IntegerField()
     price = models.FloatField()
     quantity = models.PositiveIntegerField(default=0)
-    discount = models.ForeignKey(discount, on_delete=models.CASCADE, blank=True, null=True, default=None)
-    designer= models.ForeignKey(designer, on_delete=models.CASCADE, default=True)
+    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    designer= models.ForeignKey(Designer, on_delete=models.CASCADE, default=True)
     slug = models.SlugField(null=True, blank=True, unique=True)
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(f'{self.color.color}-{self.title}- {self.code}' )
+    #     super(product_version, self ).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -71,31 +81,32 @@ class product_version (TimeStampedModel, models.Model):
 
 class Image(models.Model):
     img = models.ImageField(upload_to = 'product_images')
-    product = models.ForeignKey(product_version, related_name='images',  on_delete=models.CASCADE )
+    product = models.ForeignKey(Product_version, related_name='images',  on_delete=models.CASCADE )
     is_main = models.BooleanField (default = False )
-
 
     def __str__(self):
         return f'Image of {self.product.title}'
 
 
 
-class rating (models.Model):
+
+class Rating (models.Model):
     point = models.IntegerField()
 
 
-class review(TimeStampedModel, models.Model):
+class Review(TimeStampedModel, models.Model):
     review_text = models.TextField()
-    customer = models.ForeignKey(customer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     email = models.EmailField()
-    product_version = models.ForeignKey(product_version, on_delete=models.CASCADE, null=True)
-    rating = models.ForeignKey(rating, on_delete=models.CASCADE)
+    product_version = models.ForeignKey(Product_version, on_delete=models.CASCADE, null=True)
+    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, default=1)
 
     
 
 
 class Property(models.Model):
     title = models.CharField(max_length=50)
+    category = models.ForeignKey(ProductCategory, on_delete = models.CASCADE)
 
 
     class Meta:
@@ -117,8 +128,16 @@ class PropertyValue(models.Model):
 
 class ProductPropertyValue(models.Model):
     property_value = models.ForeignKey(PropertyValue, on_delete=models.CASCADE)
-    product = models.ForeignKey(product_version, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product_version, on_delete=models.CASCADE)
 
   
+    # def __str__(self):
+    #     return self.property_value
 
 
+class Wishlist(models.Model):
+    product_version = models.ForeignKey(Product_version, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.product_version} is liked by {self.user}'

@@ -3,7 +3,8 @@ from django.views.generic import ListView
 from django.shortcuts import render, redirect
 from .forms import shippingForm, billingForm
 
-
+# def cart_view(request):
+#     return render (request, "shopping-cart.html")
 
 class cart(ListView):
     template_name = 'shopping-cart.html'

@@ -1,4 +1,7 @@
+from distutils.command.upload import upload
+from email.policy import default
 from django.db import models
+# Create your models here.
 
 from django.contrib.auth.models import AbstractUser
 from core.models import TimeStampedModel
@@ -30,23 +33,24 @@ class User(AbstractUser):
 
 
 
-class customer (TimeStampedModel, models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone = models.IntegerField()
-    password = models.CharField(max_length=15)
-    address1 = models.TextField()
-    address2 = models.TextField()
-    town = models.CharField(max_length=100)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, default="")
-    img = models.ImageField(upload_to = 'customer_images', default='')
+# class customer (TimeStampedModel, models.Model):
+#     first_name = models.CharField(max_length=100)
+#     last_name = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     phone = models.IntegerField()
+#     password = models.CharField(max_length=15)
+#     address1 = models.TextField()
+#     address2 = models.TextField()
+#     town = models.CharField(max_length=100)
+#     country = models.ForeignKey(Country, on_delete=models.CASCADE, default="")
+#     img = models.ImageField(upload_to = 'customer_images', default='')
 
-    def __str__(self) -> str:
-        return f'{self.first_name} - {self.last_name}'
+#     def __str__(self) -> str:
+#         return f'{self.first_name} - {self.last_name}'
 
 class SubscriberEmail(TimeStampedModel):
     email = models.EmailField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.email

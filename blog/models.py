@@ -1,16 +1,18 @@
 from django.db import models
 # from django.contrib.auth.models import User
-from accounts.models import customer
 from core.models import TimeStampedModel
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.utils.text import slugify
 from datetime import datetime
-class tag (models.Model):
-    tag_title = models.TextField()
+from ckeditor.fields import RichTextField
+
+
+class Tag (models.Model):
+    title = models.TextField()
     
     def __str__(self) -> str:
-        return f'Tag:  {self.tag_title}'
+        return f'Tag:  {self.title}'
 
 
 class BlogCategory(TimeStampedModel, models.Model):
@@ -23,12 +25,12 @@ class BlogCategory(TimeStampedModel, models.Model):
         verbose_name_plural = 'BlogCategories'
 
 
-class blog (TimeStampedModel, models.Model):
-    blog_title = models.CharField(max_length=255)
+class Blog (TimeStampedModel, models.Model):
+    title = models.CharField(max_length=255)
     user= models.ForeignKey(User, on_delete=models.CASCADE)
-    desc = models.TextField()
-    history = models.TextField()
-    blogTag = models.ManyToManyField(tag, blank=True)
+    short_desc = models.TextField()
+    content = RichTextField()
+    tag = models.ManyToManyField(Tag, blank=True)
     slug = models.SlugField(null=True, blank=True, unique=True)
     category = models.ForeignKey(BlogCategory, on_delete = models.CASCADE, null=True)
 
@@ -39,33 +41,38 @@ class blog (TimeStampedModel, models.Model):
         self.save() 
     
     def hard_delete(self):
-        super(blog, self).delete()
+        super(Blog, self).delete()
 
     def __str__(self) -> str:
-        return f' Blog by {self.blog_title}'
+        # print(blog.objects.filter(tag_blog__id = self.id))
+        return f' Blog by {self.title}'
         
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.blog_title)
-        super(blog, self ).save(*args, **kwargs)
+        self.slug = slugify(self.title)
+        super(Blog, self ).save(*args, **kwargs)
 
-class image (models.Model):
+class Image (models.Model):
     img = models.ImageField(upload_to = 'blog_images')
-    blog =  models.ForeignKey(blog, on_delete=models.CASCADE, default=True, null=True)
+    blog =  models.ForeignKey(Blog, on_delete=models.CASCADE, default=True, null=True)
 
 
+# class blog_tag_relation (models.Model):
+#     blog_id = models.ForeignKey(blogs, on_delete=models.CASCADE)
+#     tag_id = models.ForeignKey(tags, on_delete=models.CASCADE)
 
 
-class comment (TimeStampedModel, models.Model):
+class Comment (TimeStampedModel, models.Model):
     subject = models.TextField()
     desc = models.TextField()
-    customer = models.ForeignKey(customer, on_delete=models.CASCADE, null=True)
-    blog= models.ForeignKey(blog, related_name='comments',  on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    blog= models.ForeignKey(Blog, related_name='comments',  on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:
-        return f' Comment by  {self.customer_id}'
+        return f' Comment by  {self.user_id}'
+# comments.objects.create(subject = "I read the blog...", desc="It's amazing", customer_id=customer.objects.get(id=1), blog_id=blog.objects.get(id=1))
 
 class BlogStatistic(models.Model):
-    blog = models.ForeignKey(blog, on_delete=models.CASCADE, null=True)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
     comment_count =  models.PositiveIntegerField(default=0)
 
 

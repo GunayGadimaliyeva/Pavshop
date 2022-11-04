@@ -1,8 +1,7 @@
-from unicodedata import category
 from modeltranslation.translator import translator, TranslationOptions
-from .models import productCategory
+from .models import ProductCategory
 
 class ProductCategoryTranslationOptions(TranslationOptions):
     fields = ["category_name"]
 
-translator.register(productCategory, ProductCategoryTranslationOptions)
+translator.register(ProductCategory, ProductCategoryTranslationOptions)

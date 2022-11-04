@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 # Register your models here.
 #modellerimizi her appin oz admin.py inda bu cur register edirik ki, admin panelimizde gorunsun:
-admin.site.register([basket_item, promocode,basket, shipping_info, billing_detail, payment_method])
+admin.site.register([Basket_item, Promocode, Basket, Shipping_info, Billing_detail, Payment_method, OrderStatus, Order])
 
 
 class CardNumberFilter(SimpleListFilter):
@@ -25,12 +25,12 @@ class CardNumberFilter(SimpleListFilter):
             return queryset.filter(mail='')
 
 
-@admin.register(cart)
+@admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display= ['id','cart_number', 'cvv_code', 'customer','display1_customer_phone', '__str__' , ]  
+    list_display= ['id','cart_number', 'cvv_code','display1_customer_phone', '__str__' , ]  
     list_filter= ['cart_number', 'cvv_code', CardNumberFilter]
-    search_fields = ['cart_number', 'cvv_code', 'customer__first_name']
-    list_editable= [ 'cvv_code', 'customer',  ] 
+    search_fields = ['cart_number', 'cvv_code', 'user__first_name']
+    list_editable= [ 'cvv_code',  ] 
     list_max_show_all = 10
     list_per_page = 2
     # readonly_fields=['created_at']
@@ -41,15 +41,15 @@ class CartAdmin(admin.ModelAdmin):
         ("Cart details", {
             'fields':(
                 "cart_number", 'cvv_code'
-            )
+                )
         }),
         ('Cart Date info',{
             'fields':('expiration_date',
             )
         }),
         ('Customer info',{
-            'fields':('customer',
-            )
+            'fields':('user',),
+            # 'classes': ('collapse',)
         })
     ]  
     # NOTE: Bunun==>admin.site.register(cart, CartAdmin) evezine yuxarida @admin.register(cart) decoratorunu da yazsaq ishleyecek. 
@@ -58,7 +58,7 @@ class CartAdmin(admin.ModelAdmin):
     #Models.py da Cart modelinin altinda yazdigimizi burda bu cur de yaza bilerik, sadece burada funksiya self ve obj qebul edir, self-burada CartAdmin classina uygun gelir.
     @admin.display(description='Additional column')
     def display1_customer_phone(self, obj):
-        return format_html('<font color="red">{}</font>', obj.customer.phone )   #bu format_html-dir.
+        return format_html('<font color="red">{}</font>', obj.user.phone )   #bu format_html-dir.
         # return f'<font color="red">{ obj.customer_id.phone}'                      #bele de yaza bilerik , bu f stringdir.
         
         ##NOTE:  mark safe ile bele yaza bilerdik: 

@@ -1139,9 +1139,9 @@ select.bs-select-hidden, select.selectpicker {
 .bootstrap-select.fit-width {
 	width: auto !important;
 }
-.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+/* .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
 	width: 110px;
-}
+} */
 .bootstrap-select .dropdown-toggle:focus {
 	outline: thin dotted #333333 !important;
 	outline: 5px auto -webkit-focus-ring-color !important;

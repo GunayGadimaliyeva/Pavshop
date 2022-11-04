@@ -236,16 +236,16 @@ a:hover, a:focus {
 ========================================================*/
 .btn {
 	border: none;
-	color: #fff;
+	color: #fff !important;
 	display: inline-block;
-	padding: 5px 50px;
+	padding: 5px 50px !important;
 	text-transform: uppercase;
 	font-weight: bold;
 	font-size: 18px;
 	border-radius: 0px;
 	font-family: 'Montserrat', sans-serif;
 	line-height: 46px;
-	background: #2d3a4b;
+	background: #2d3a4b !important;
 	letter-spacing: 1px;
 	position: relative;
 	z-index: 1;
@@ -1803,7 +1803,6 @@ header .is-sticky .sticky .user-basket .dropdown-menu {
 	margin-bottom: 20px;
 }
 .shop-detail .some-info .btn {
-	width: 100%;
 	padding: 0px;
 }
 .shop-detail .some-info .btn:hover {

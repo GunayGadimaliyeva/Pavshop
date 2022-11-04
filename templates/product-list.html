@@ -1,5 +1,7 @@
-{% extends 'base.html' %}{% load static %} {% block content %}
-{% load custom_tags_and_filters %}
+{% extends 'base.html' %}{% load static %} 
+{% block title %} Products {% endblock %}
+{% block content %}
+{% load custom_filters %}
 
 <!--======= SUB BANNER =========-->
 <section class="sub-bnr" data-stellar-background-ratio="0.5">
@@ -31,17 +33,17 @@
                             <div class="col-xs-6">
                                 <div class="pull-left">
 
-                                    <!-- Short By -->
+                                    <!-- Sort By -->
                                     <select class="selectpicker">
-                      <option>Short By</option>
-                      <option>Short By</option>
-                      <option>Short By</option>
+                      <option>Sort By</option>
+                      <option>Sort By</option>
+                      <option>Sort By</option>
                     </select>
                                     <!-- Filter By -->
                                     <select class="selectpicker">
                       <option>Filter By</option>
-                      <option>Short By</option>
-                      <option>Short By</option>
+                      <option>Filter By</option>
+                      <option>Filter By</option>
                     </select>
 
                                     <!-- GRID & LIST -->
@@ -59,20 +61,27 @@
                             <div class="item">
                                 <!-- Sale Tags -->
                                 {% if product.discount %}
-                                <div class="on-sale"> {{product.discount.disc_amount}}<span>OFF</span> </div>
+                                <div class="on-sale"> {{product.discount.disc_amount}}{% if product.discount.disc_is_percent %}%{% else %}man{% endif %} <br><span>OFF</span> </div>
                                 {% endif %}
                                 <!-- Item img -->
                                 <!-- {% for img in image %}
                                     <img class="img-1" src="{{img.img.url}}" alt="">
                                 {% endfor %} -->
-                                <div class="item-img"> <img class="img-1" src="{{product.cover_image.url}}" alt="">
-                                    <!-- Overlay -->
-                                    <div class="overlay">
-                                        <div class="position-center-center">
-                                            <div class="inn"><a href="{{product.cover_image.url}}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
-                                        </div>
-                                    </div>
+                                
+                                <div class="item-img">
+                                    {% for img in images %}
+                                        {% if img.product.id == product.id %}
+                                            <img class="img-1" src="{{img.img.url}}" alt="">
+                                            <!-- Overlay -->
+                                                <div class="overlay">
+                                                    <div class="position-center-center">
+                                                        <div class="inn"><a href="{{img.img.url}}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
+                                                    </div>
+                                                </div>
+                                        {% endif %}
+                                    {% endfor  %} 
                                 </div>
+                                    
                                 <!-- Item Name -->
                                 <div class="item-name"> <a href="{% url 'product_detail' product.slug %}">{{product.title|upper}}</a>
                                     <p>{{product.product.small_desc}}</p>
@@ -83,8 +92,7 @@
                         {% empty %}
                         <p style="color: red; font-size: 12px;">Sorry, we haven't any product!</p>
                         {% endfor %}
-                        <!-- <h1>Latest products </h1>
-                        {% show_latest_products %} -->
+                       
                     </div>
 
                     <!-- Pagination -->
@@ -120,19 +128,8 @@
                         <h5 class="shop-tittle margin-bottom-30">category</h5>
                         <ul class="shop-cate">
                             {% for category in categories %}
-                                <li><a href="{% url 'product_list' %}?category={{category.category_name}}"> {{category.category_name}} <span>24</span></a></li>
+                                <li><a href="{% url 'product_list' %}?category={{category.category_name}}"> {{category }} <span>{{ category|count }}</span></a></li>
                             {% endfor %}
-                            <!-- <li><a href="#."> Chair <span>24</span></a></li>
-                            <li><a href="#."> Bag <span>122</span></a></li>
-                            <li><a href="#."> Soffa <span>09</span></a></li>
-                            <li><a href="#."> Bed <span>12</span></a></li>
-                            <li><a href="#."> Shoes <span>98</span></a></li>
-                            <li><a href="#."> Table <span>34</span></a></li>
-                            <li><a href="#."> Bedsheets <span>23</span></a></li>
-                            <li><a href="#."> Curtains <span>43</span></a></li>
-                            <li><a href="#."> TV Cabinets <span>12</span></a></li>
-                            <li><a href="#."> Clocks <span>18</span></a></li>
-                            <li><a href="#."> Towels <span>25</span></a></li> -->
                         </ul>
 
                         <!-- FILTER BY PRICE -->

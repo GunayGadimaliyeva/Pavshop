@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %} {% block content %}
+{% extends 'base.html' %}{% load static custom_filters %} 
+{% block title %} Product-detail {% endblock %}
+{% block content %}
 <!--======= SUB BANNER =========-->
 <section class="sub-bnr" data-stellar-background-ratio="0.5">
     <div class="position-center-center">
@@ -27,28 +29,24 @@
                     <!-- Popular Images Slider -->
                     <div class="col-md-7">
 
-                        <!-- Images Slider -->
+                         <!-- Images Slider -->
                         <div class="images-slider">
                             <ul class="slides">
-                                {% for image in product.img %}
-                                    <!-- <li data-thumb="{ image.img.url  }}"><img class="img-responsive" src="{{ image.img.url  }}" alt=""></li> -->
-                                    <li data-thumb="{% static 'images/large-img-1.jpg' %}"> <img class="img-responsive" src="{% static 'images/large-img-1.jpg' %}" alt=""> </li>
+                                {% for img in images %}
+                                    <li data-thumb="{{img.img.url}}"> <img class="img-responsive" src="{{img.img.url}}"  alt=""> </li> -->
                                 {% endfor %}
-                                <!-- <li data-thumb="{% static 'images/large-img-1.jpg' %}"> <img class="img-responsive" src="{% static 'images/large-img-1.jpg' %}" alt=""> </li>
-                                <li data-thumb="{% static 'images/large-img-2.jpg' %}"> <img class="img-responsive" src="{% static 'images/large-img-2.jpg' %}" alt=""> </li>
-                                <li data-thumb="{% static 'images/large-img-3.jpg' %}"> <img class="img-responsive" src="{% static 'images/large-img-3.jpg' %}" alt=""> </li> -->
                             </ul>
                         </div>
                     </div>
 
                     <!-- COntent -->
                     <div class="col-md-5">
-                        <h4>{{product.title}}</h4>
+                        <h4 style="font-weight:bold">{{product.title}}</h4>
                         <span class="price"><small>$</small>{{product.price}}</span>
 
                         <!-- Sale Tags -->
                         {% if product.discount %}
-                        <div class="on-sale"> {{product.discount.disc_amount}}<span>OFF</span> </div>
+                        <div class="on-sale"> {{product.discount.disc_amount}}{% if product.discount.disc_is_percent %}%{% else %}man{% endif %} <br><span>OFF</span> </div>
                         {% endif %}
                         <ul class="item-owner">
                             <li>Designer : <span>{{ product.designer.designer}}</span></li>
@@ -65,14 +63,17 @@
                                     <div class="quinty">
                                         <!-- QTY -->
                                         <select class="selectpicker">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                      </select>
+                                            {% for q in product.quantity|get_range %}
+                                            <option>{{q}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </li>
 
                                 <!-- COLORS -->
+                                <!-- {% for color in colorproperties %}
+                                     <span>'Colorsss'{{color}}</span>
+                                {% endfor %} -->
                                 <li class="col-xs-8">
                                     <ul class="colors-shop">
                                         <li><span class="margin-right-20">Colors</span></li>
@@ -254,78 +255,31 @@
 
             <!-- Popular Item Slide -->
             <div class="papular-block block-slide single-img-demos">
-
-                <!-- Item -->
-                <div class="item">
-                    <!-- Item img -->
-                    <div class="item-img"> <img class="img-1" src="{% static 'images/product-1.jpg' %}" alt="">
-                        <!-- Overlay -->
-                        <div class="overlay">
-                            <div class="position-center-center">
-                                <div class="inn"><a href="{% static 'images/product-1.jpg' %}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
-                            </div>
+                {% for product in related %}
+                    <!-- Item -->
+                    <div class="item">
+                        <!-- Item img -->
+                        {% for img in relatedimg %}
+                                        {% if img.product.id == product.id %}
+                                            <div class="item-img"> <img class="img-1" src="{{img.img.url}}" alt="">
+                                                <!-- Overlay -->
+                                                <div class="overlay">
+                                                    <div class="position-center-center">
+                                                        <div class="inn"><a href="{{img.img.url}}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                        {% endfor  %} 
+                        
+                        <!-- Item Name -->
+                        <div class="item-name"> <a href="#.">{{product.title}}</a>
+                            <p>{{ product.product.small_desc}}</p>
                         </div>
-                    </div>
-                    <!-- Item Name -->
-                    <div class="item-name"> <a href="#.">stone cup</a>
-                        <p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <!-- Price -->
-                    <span class="price"><small>$</small>299</span> </div>
-
-                <!-- Item -->
-                <div class="item">
-                    <!-- Item img -->
-                    <div class="item-img"> <img class="img-1" src="{% static 'images/product-2.jpg' %}" alt="">
-                        <!-- Overlay -->
-                        <div class="overlay">
-                            <div class="position-center-center">
-                                <div class="inn"><a href="{% static 'images/product-2.jpg' %}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Item Name -->
-                    <div class="item-name"> <a href="#.">gray bag</a>
-                        <p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <!-- Price -->
-                    <span class="price"><small>$</small>299</span> </div>
-
-                <!-- Item -->
-                <div class="item">
-                    <!-- Item img -->
-                    <div class="item-img"> <img class="img-1" src="{% static 'images/product-3.jpg' %}" alt="">
-                        <!-- Overlay -->
-                        <div class="overlay">
-                            <div class="position-center-center">
-                                <div class="inn"><a href="{% static 'images/product-3.jpg' %}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Item Name -->
-                    <div class="item-name"> <a href="#.">chiar</a>
-                        <p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <!-- Price -->
-                    <span class="price"><small>$</small>299</span> </div>
-
-                <!-- Item -->
-                <div class="item">
-                    <!-- Item img -->
-                    <div class="item-img"> <img class="img-1" src="{% static 'images/product-4.jpg' %}" alt="">
-                        <!-- Overlay -->
-                        <div class="overlay">
-                            <div class="position-center-center">
-                                <div class="inn"><a href="{% static 'images/product-4.jpg' %}" data-lighter><i class="icon-magnifier"></i></a> <a href="#."><i class="icon-basket"></i></a> <a href="#."><i class="icon-heart"></i></a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Item Name -->
-                    <div class="item-name"> <a href="#.">STool</a>
-                        <p>Lorem ipsum dolor sit amet</p>
-                    </div>
-                    <!-- Price -->
-                    <span class="price"><small>$</small>299</span> </div>
+                        <!-- Price -->
+                        <span class="price"><small>$</small>{{product.price}}</span> </div>
+                {% endfor %}
+                
             </div>
         </div>
     </section>

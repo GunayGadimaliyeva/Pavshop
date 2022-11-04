@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 {% load i18n %}
 {% load static %}
+
+{% block extrahead %}
+<script>window.CKEDITOR_BASEPATH = '/my_static/ckeditor/ckeditor/';</script>
+{{ block.super }}
+{% endblock %}
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> {% block title %}{% endblock %} | Pavshop</title>
     <!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
     <link rel="stylesheet" type="text/css" href="{% static 'rs-plugin/css/settings.css' %}" media="screen" />
     <!-- Bootstrap Core CSS -->
@@ -376,7 +382,9 @@
     <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
     <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.tp.t.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'rs-plugin/js/jquery.tp.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>{% block js %}{% endblock %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>{% block js %}{% endblock %}
 </body>
 
 </html>

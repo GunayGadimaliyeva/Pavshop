@@ -1,36 +1,31 @@
 from django.contrib import admin
-
-# Register your models here.
-
+from modeltranslation.admin import TranslationAdmin
+from django.contrib.admin import SimpleListFilter
 from .models import *
 
 
 
-admin.site.register(brand)
-admin.site.register(discount)
-admin.site.register(designer)
-admin.site.register(product)
+admin.site.register(Brand)
+admin.site.register(Discount)
+admin.site.register(Designer)
+admin.site.register(Product)
 admin.site.register(Image)
 admin.site.register(Property)
 admin.site.register(PropertyValue)
 admin.site.register(ProductPropertyValue)
+admin.site.register(Review)
+admin.site.register(Wishlist)
 
-from modeltranslation.admin import TranslationAdmin
+
 
 class ProductCategoryAdmin(TranslationAdmin):
     pass
 
-admin.site.register(productCategory, ProductCategoryAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 
+class ImageInlineAdmin(admin.TabularInline):
+    model = Image
 
-
-
-admin.site.register(review)
-
-
-
-
-from django.contrib.admin import SimpleListFilter
 
 class discountFilter(SimpleListFilter):
     title= "Filter by discount"
@@ -50,6 +45,10 @@ class discountFilter(SimpleListFilter):
             return queryset.filter (discount_id__isnull=True )
         
 
-@admin.register(product_version)
-class productAdmin(admin.ModelAdmin):
+@admin.register(Product_version)
+class ProductVersionAdmin(admin.ModelAdmin):
     list_filter = [discountFilter]
+    inlines = (ImageInlineAdmin,)   #Product_version modeline Images hissesini elave edirem ki rahatliqla eyni sehifeden hem productu, hem de onun imagelerini add ede bilim.
+
+    # Bununla title yazdiqca avtomatik slugun yazildigini gore bilerik:
+    # prepopulated_fields = {'slug':['title',] }

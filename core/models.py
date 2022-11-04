@@ -5,6 +5,7 @@ from django.core.management.commands import makemessages
 
 
 
+# Create your models here.
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -13,14 +14,16 @@ class TimeStampedModel(models.Model):
         abstract=True 
 
 
-class adress (models.Model):
+# class Images(models.Model):
+#     img = models.many
+class Adress (models.Model):
     address = models.CharField(max_length=200)
     class Meta:
         verbose_name_plural = "adresses"
     
 
-class contanct_info (models.Model):
-    address= models.ForeignKey(adress, on_delete=models.CASCADE)
+class Contanct_info (models.Model):
+    address= models.ForeignKey(Adress, on_delete=models.CASCADE)
     phone = models.IntegerField()
     email_address = models.EmailField()
   
